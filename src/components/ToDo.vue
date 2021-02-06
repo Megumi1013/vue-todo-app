@@ -15,7 +15,7 @@
                                     focus:ring-blue-300 focus:border-transparent w-full">
                     </div>
                     </form>
-<!-- 
+
                     <div class="my-4 max-w-xl mx-auto">
                         <ul class="flex justify-between">
                             <li @click="sortAll" class="mr-8 text-gray-500 align-middle cursor-pointer">
@@ -30,27 +30,27 @@
                                 </i>
                                 Completed
                             </li>
-                            <li @click="sortTrashed" class="text-gray-500 align-middle cursor-pointer">
+                           <li @click="sortTrashed" class="text-gray-500 align-middle cursor-pointer">
                                 <i class="material-icons">
                                     keyboard_arrow_down
                                 </i>
                                 Trashed
                             </li>
 
-                            <li @click="clearCompleted" class="ml-auto text-gray-500 align-middle cursor-pointer">
+                             <li @click="clearCompleted" class="ml-auto text-gray-500 align-middle cursor-pointer">
                                 <i class="material-icons">
                                     delete_outline
                                 </i>
                                 Trash Completed
                             </li>
                         </ul>
-                    </div>  -->
+                    </div> 
 
                     <div class="my-4 p-6 max-w-xl mx-auto bg-white rounded-xl shadow-md">
 
-                            <div v-for="(todoItem, todoItemIndex) in todoStorage" :key="todoItemIndex" class="flex items-center py-3">
+                            <div v-for="(todoItem, todoItemIndex) in filteredTodos" :key="todoItemIndex" class="flex items-center py-3">
                                 <div class="flex items-center mr-auto w-full">
-                                    <!-- <div class="flex-1">
+                                    <div class="flex-1">
                                         <label for="checkBox" class="bg-white border-2 rounded-full border-gray-200 w-8 h-8 flex flex-shrink-0 justify-center items-center mr-4 focus-within:border-blue-300">
                                             <input 
                                                 @click="changeState(todoItem)" 
@@ -64,10 +64,10 @@
                                                 <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
                                             </svg>
                                         </label>
-                                    </div> -->
+                                    </div>
 
                                     <div class="w-full">
-                                        <!-- <div v-if="activeItemEditIndex !== todoItemIndex">
+                                        <div v-if="activeItemEditIndex !== todoItemIndex" class="text-left">
                                             {{ todoItem.name }}
                                         </div>
 
@@ -77,14 +77,14 @@
                                                 v-model="todoItem.name"
                                                 class="outline-none border-b-2 border-fuchsia-600 w-11/12"
                                                 />
-                                        </div> -->
-                                        {{ todoItemIndex }}{{ todoItem }}
+                                        </div>
+                                        <!-- {{ todoItemIndex }}{{ todoItem }} -->
                                     </div>
                                 </div>  
                                 
 
                                 <div class="flex items-center">
-                                    <!-- <button 
+                                    <button 
                                         v-if="activeItemEditIndex === todoItemIndex"
                                         @click="activeItemEditIndex = null"
                                         class="mr-3 bg-yellow-300 rounded h-8 w-8 flex items-center justify-center">
@@ -95,7 +95,7 @@
                                         @click="editItem(todoItemIndex)"
                                         class="mr-3 bg-blue-300 rounded h-8 w-8 flex items-center justify-center">
                                         <i class="material-icons text-white">edit</i>
-                                    </button>-->
+                                    </button>
                                     <button 
                                         @click="removeItem(todoItem)"
                                         class="bg-gray-300 rounded h-8 w-8 flex items-center justify-center">
@@ -115,44 +115,45 @@ export default {
             title: 'To do app',
             todoStorage: [],
             newTodoItem: '',
-            
-            // activeFilter: null,
+            activeFilter: null,
+            activeItemEditIndex: null
         }
     },
     computed: {
-                // filteredTodos() {
-                //     switch (this.activeFilter) {
+                filteredTodos() {
+                    switch (this.activeFilter) {
 
-                //         case 'completed':
+                        case 'completed':
 
-                //             return this.todos.filter(function(todo) {
-                //                 //filter?
-                //                 return todo.state && !todo.trashed;
-                //                 // return todo.state === true;
-                //             });
+                            return this.todoStorage.filter(function(todoItem) {
+                                //filter?
+                                return todoItem.state && !todoItem.trashed;
+                                // return todoItem.state === true;
+                            });
 
-                //         case 'trashed':
+                        case 'trashed':
 
-                //             return this.todos.filter(function(todo) {
-                //                 return todo.trashed;
-                //             });
+                            return this.todoStorage.filter(function(todoItem) {
+                                return todoItem.trashed;
+                            });
 
-                //         case null:
-                //         default:
+                        case null:
+                        default:
 
-                //             return this.todos.filter(function(todo) {
+                            return this.todoStorage.filter(function(todoItem) {
                                 
-                //                 return !todo.trashed;
+                                return !todoItem.trashed;
                                 
-                //             });
+                            });
 
-                //     }
-                // },
+                    }
+                },
             },
     methods:{
             submit: function(){
+                let todoStorageLength = this.todoStorage.length;
                 this.todoStorage.push({
-                    id: this.todoStorage.length++,
+                    id: todoStorageLength++,
                     name: this.newTodoItem,
                     state: false
                 })
@@ -173,56 +174,52 @@ export default {
                 // }
             },
 
-            //     changeState: function(todoItem){
-            //         console.log(todoItem);
-            //         todoItem.state = !todoItem.state;
-            //         console.log(todoItem.state);
-            //         if(todoItem.state === true){
-            //             show:true;
+            changeState: function(todoItem){
+                todoItem.state = !todoItem.state;
+                // if(todoItem.state === true){
+                //     show:true;
 
-            //         }else if(todoItem.state === false){
-            //             show:false;
-            //         }
-            //     },
+                // }else if(todoItem.state === false){
+                //     show:false;
+                // }
+            },
             removeItem: function(todoItem){
                 var index = this.todoStorage.indexOf(todoItem);
                 this.todoStorage.splice(index,1);
                 // indexOf = find?
                 // splice??
             },
-            //     sortAll: function(){
-            //         this.activeFilter = null;
-            //     },
-            //     sortCompleted: function(){
-            //         this.activeFilter = 'completed';
-            //     },
-            //     sortTrashed: function(){
-            //         this.activeFilter = 'trashed';
-            //     },
+                sortAll: function(){
+                    this.activeFilter = null;
+                },
+                sortCompleted: function(){
+                    this.activeFilter = 'completed';
+                },
+                sortTrashed: function(){
+                    this.activeFilter = 'trashed';
+                },
 
-            //     editItem(todoItemIndex){
-            //         this.activeItemEditIndex = todoItemIndex;
-            //         console.log(this.activeItemEditIndex);
-            //     },
+                editItem(todoItemIndex){
+                    this.activeItemEditIndex = todoItemIndex;
+                    // console.log(this.activeItemEditIndex);
+                },
                 
-            //     clearCompleted: function(){
-            //         console.log('clearCompleted');
+                clearCompleted: function(){
 
-            //         var that = this;
+                    var that = this;
 
-            //         this.todos.forEach(function (todo, index) {
+                    this.todoStorage.forEach(function (todoItem, todoItemIndex) {
+                            console.log('clearCompleted');
+                        if (todoItem.state) {
+                            that.$set(that.todoItem[todoItemIndex], 'trashed', true);
+                            // that.todoItem[todoItemIndex].trashed = true;
+                            // that.$forceUpdate();
+                            //$set?
+                        }
 
-            //             if (todo.state) {
-            //                 that.$set(that.todos[index], 'trashed', true);
-            //                 // that.todos[index].trashed = true;
-            //                 // that.$forceUpdate();
-            //                 //$set?
-            //             }
-
-            //         });
-            //     }
-            // },
-        },
+                    });
+                }
+            },
             // watch:{
             //     todos:{
             //         handler:function(todos){
