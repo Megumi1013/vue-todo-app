@@ -206,18 +206,21 @@ export default {
                 
                 clearCompleted: function(){
 
-                    var that = this;
-
-                    this.todoStorage.forEach(function (todoItem, todoItemIndex) {
-                            console.log('clearCompleted');
-                        if (todoItem.state) {
-                            that.$set(that.todoItem[todoItemIndex], 'trashed', true);
-                            // that.todoItem[todoItemIndex].trashed = true;
-                            // that.$forceUpdate();
-                            //$set?
-                        }
-
+                    this.todoStorage.filter(item => item.state).map((item) => {
+                        return item.trashed = true;
                     });
+                    //mapで各要素1つずつに対して「コールバック関数」を実行
+                    //filter(コールバック関数)じゃなくても動くのはなぜ、、
+
+                    // var that = this;
+
+                    // this.todoStorage.forEach(function (todoItem, todoItemIndex) {
+                    //         console.log('clearCompleted');
+                    //     if (todoItem.state) {
+                    //         that.$set(that.todoItem[todoItemIndex], 'trashed', true);
+                    //     }
+
+                    // });
                 }
             },
             // watch:{
