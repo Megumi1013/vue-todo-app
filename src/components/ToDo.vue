@@ -206,11 +206,17 @@ export default {
                 
                 clearCompleted: function(){
 
-                    this.todoStorage.filter(item => item.state).map((item) => {
-                        return item.trashed = true;
+                    this.todoStorage.filter(item => {
+                      return item.state
+                    }).map(item => {
+                      item.trashed = true;
                     });
+
+                    // this.todoStorage.filter(item => item.state).map((item) => {
+                    //   item.trashed = true;
+                    // });
+                    //
                     //mapで各要素1つずつに対して「コールバック関数」を実行
-                    //filter(コールバック関数)じゃなくても動くのはなぜ、、
 
                     // var that = this;
 
