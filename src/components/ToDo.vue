@@ -5,18 +5,10 @@
                     <h1 class="text-center text-5xl text-gray-600">{{ title }}</h1>
                     </div>
 
-                    <form class="todo-form" @submit.prevent="submit">
-                    <div>
-                        <input type="text" 
-                            v-model="newTodoItem"
-                            placeholder="What do you need to do?"
-                            class="p-4 max-w-xl mx-auto bg-white rounded-xl shadow-md flex items-center 
-                                    space-x-4 border border-transparent focus:outline-none focus:ring 
-                                    focus:ring-blue-300 focus:border-transparent w-full">
-                    </div>
-                    </form>
-
-                    <div class="my-4 max-w-xl mx-auto">
+                  <form class="todo-form" @submit.prevent="submit">
+                    <Form :value="newTodoItem"/>
+                  </form>
+                  <div class="my-4 max-w-xl mx-auto">
                         <ul class="flex justify-between">
                             <li @click="sortAll" class="mr-8 text-gray-500 align-middle cursor-pointer">
                                 <i class="material-icons">
@@ -108,8 +100,13 @@
         </div>
 </template>
 <script>
+import Form from './Form.vue'
+
 export default {
     name: 'ToDo',
+    components:{
+      Form,
+    },
     data(){
         return{
             title: 'To do app',
@@ -119,6 +116,7 @@ export default {
             activeItemEditIndex: null
         }
     },
+
     computed: {
                 filteredTodos() {
                     switch (this.activeFilter) {
@@ -150,7 +148,8 @@ export default {
                 },
             },
     methods:{
-            submit: function(){
+            submit: function($event){
+              this.newTodoItem = $event.target[0].value
                 let todoStorageLength = this.todoStorage.length;
                 this.todoStorage.push({
                     id: todoStorageLength++,
