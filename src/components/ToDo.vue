@@ -5,9 +5,7 @@
                     <h1 class="text-center text-5xl text-gray-600">{{ title }}</h1>
                     </div>
 
-                  <form class="todo-form" @submit.prevent="submit">
-                    <Form :value="newTodoItem"/>
-                  </form>
+                  <Form :value="newTodoItem" v-on:register-todo="submit"/>
                   <div class="my-4 max-w-xl mx-auto">
                         <ul class="flex justify-between">
                             <li @click="sortAll" class="mr-8 text-gray-500 align-middle cursor-pointer">
@@ -148,8 +146,8 @@ export default {
                 },
             },
     methods:{
-            submit: function($event){
-              this.newTodoItem = $event.target[0].value
+            submit: function(value){
+              this.newTodoItem = value
                 let todoStorageLength = this.todoStorage.length;
                 this.todoStorage.push({
                     id: todoStorageLength++,
@@ -158,7 +156,7 @@ export default {
                 })
                 this.newTodoItem = '';
 
-                console.log(this.todoStorage)
+                // console.log(this.todoStorage)
                 
                 // if (this.newTodoItem.length > 0){
 
