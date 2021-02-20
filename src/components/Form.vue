@@ -1,59 +1,67 @@
 <template>
-<<<<<<< HEAD
-  <div>
-    <input type="text"
-           @input="formSubmit"
-           :value="value"
-           placeholder="What do you need to do?"
-           class="p-4 max-w-xl mx-auto bg-white rounded-xl shadow-md flex items-center
-                    space-x-4 border border-transparent focus:outline-none focus:ring
-                    focus:ring-blue-300 focus:border-transparent w-full">
-  </div>
-=======
-    <form class="todo-form" @submit.prevent="formSubmit">
-      <div>
-        <input type="text"
-          :value="value"
-          placeholder="What do you need to do?"
-          class="p-4 max-w-xl mx-auto bg-white rounded-xl shadow-md flex items-center
+
+    <form class="todo-form" @submit.prevent="onSubmit">
+        <div>
+            <input type="text"
+                   :disabled="todosLoading"
+                   v-model="newItem"
+                   placeholder="What do you need to do?"
+                   class="p-4 max-w-xl mx-auto bg-white rounded-xl shadow-md flex items-center
                 space-x-4 border border-transparent focus:outline-none focus:ring
                 focus:ring-blue-300 focus:border-transparent w-full">
-      </div>
+        </div>
     </form>
->>>>>>> 0fc6712d2f6672e47c3ba63536f973567f4d9eed
+
 </template>
 
 <script>
-export default {
-  name: 'Form',
-  data() {
+    import { mapGetters, mapActions } from 'vuex'
 
-  },
-  props: {
-    value: {
-      type: String,
-      default: ''
+    export default {
+
+        name: 'Form',
+
+        data() {
+            return {
+                newItem: ''
+            }
+        },
+
+        computed: {
+
+            ...mapGetters({
+                todoItems: 'todos/items',
+                todosLoading: 'todos/loading'
+            })
+
+        },
+
+        methods: {
+
+            ...mapActions({
+                addItemAction: 'todos/addItem'
+            }),
+
+            onSubmit() {
+                if (this.todosLoading || this.newItem.length <= 0) {
+                    return;
+                }
+
+                this.addItemAction({
+                    id: this.todoItems.length++,
+                    name: this.newItem,
+                    state: false
+                })
+                    .then(() => {
+
+                        this.newItem = '';
+
+                    });
+            }
+
+        }
+
     }
-
-  },
-<<<<<<< HEAD
-  methods: {
-    formSubmit($event) {
-      console.log($event.target.value)
-      if ($event.target.value.length <= 0) {
-=======
-  methods:{
-    formSubmit($event){
-      if($event.target[0].value.length <= 0){
->>>>>>> 0fc6712d2f6672e47c3ba63536f973567f4d9eed
-        return
-      }
-
-      this.$emit('register-todo', $event.target[0].value)
-    }
-  }
-
-}
 </script>
 
 <style scoped>
